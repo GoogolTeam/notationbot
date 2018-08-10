@@ -1,6 +1,9 @@
 //todo: make a better api
 const notations=[require("./oldapi/unan.js")];
 //will probably need a server/channel input
+function iscommand(text){
+	return /^!(?:step|calculate) /.test(text);
+}
 function respond(text,reply){
 	if(/^!step /.test(text)){
 		reply(step(text.slice(6)));
@@ -34,3 +37,4 @@ function step(str){
 	return notations[j].step(str);
 }
 exports.respond=respond;
+exports.iscommand=iscommand;

@@ -3,6 +3,7 @@ const token=require("../token.js").token;
 const client=new Discord.Client();
 client.on("ready",()=>{console.log("Active")});
 client.on("message",respond);
+const commands=require("../commands/commands.js");
 function respond(msg){
 	function reply(text){
 		msg.channel.send(text).catch(a=>{
@@ -10,8 +11,10 @@ function respond(msg){
 			console.log(msg.content,text)}
 		);
 	}
-	msg.channel.startTyping();
-	commands.respond(msg.content,reply)
-	msg.channel.stopTyping();
+	if(commands.iscommand(msg.content)){
+		msg.channel.startTyping();
+		commands.respond(msg.content,reply);
+		msg.channel.stopTyping();
+	}
 }
 client.login(token);
