@@ -24,8 +24,8 @@ function step(a) {
 			return b.ignored+b.base+"["+d.start+","+d.end+b.iterator;
 		}
 	}
-	if(b.iterator==1) return b.ignored+b.base;
 	if(b.array=="0]")  return b.ignored+b.base*b.iterator;
+	if(b.iterator<=1) return b.ignored+Math.pow(b.base,b.iterator);
 	if(b.array.slice(b.array.length-3,b.array.length)==",0]") {
 		b.array = b.array.slice(0,b.array.length-3)+"]";
 		return b.ignored+b.base+"["+b.array+b.iterator;
@@ -40,7 +40,7 @@ function step(a) {
 	}
 	if(b.array[0]==0) {
 		for (var i=0;i<b.array.length;i++) {
-			if(b.array[i]==","&&b.array[i+1]!="0") {
+			if(b.array[i]==","&&b.array[i+1]!="0"||b.array[i+2]==".") {
 				pos = i;
 				for(var j=pos+1;j<b.array.length;j++) {
 					if(b.array[j]==","||b.array[j]=="{"||b.array[j]=="]") {
@@ -49,10 +49,17 @@ function step(a) {
 					}
 				}
 				var c = {start:b.array.slice(0,pos-1),middle:b.array.slice(pos+1,pos2),end:b.array.slice(pos2,b.array.length)};
-				c.middle--;
-				return b.ignored+b.base+"["+c.start+b.iterator+","+c.middle+c.end+b.base;
+				if(c.middle-Math.ceil(c.middle)+1==1) {
+					c.middle--;
+					if(b.iterator<=2) return b.ignored+b.base+"["+c.start+2+","+c.middle+c.end+(2*Math.pow(b.base/2,b.iterator-1));
+					return b.ignored+b.base+"["+c.start+b.iterator+","+c.middle+c.end+b.base;
+				}
+				var arg = b.base*(c.middle-Math.ceil(c.middle)+1);
+				if(-0.000000001<arg-Math.round(arg)&&arg-Math.round(arg)<0.000000001) arg=Math.round(arg);
+				c.middle = Math.ceil(c.middle)-1;
+				return b.ignored+b.base+"["+c.start+arg+","+c.middle+c.end+b.base;
 			}
-			if(b.array[i]=="}"&&b.array[i+1]!="0") {
+			if(b.array[i]=="}"&&b.array[i+1]!="0"||b.array[i+2]==".") {
 				pos = i;
 				pos2 = i;
 				while(b.array[pos2]!="{") {
@@ -69,7 +76,7 @@ function step(a) {
 				var right = f.middle.search("\\}");
 				var g = {sep:f.middle.slice(left+1,right),num:f.middle.slice(right+1,f.middle.length)};
 				var rep = "0"+"{"+(g.sep-1)+"}";
-				return b.ignored+b.base+"["+f.start+rep.repeat(b.iterator)+"1"+"{"+g.sep+"}"+(g.num-1)+f.end+b.base;
+				return b.ignored+b.base+"["+f.start+rep.repeat(Math.floor(b.iterator))+Math.pow(b.base,b.iterator-Math.floor(b.iterator))+"{"+g.sep+"}"+(g.num-1)+f.end+b.base;
 			}
 		}
 	}
@@ -81,13 +88,14 @@ function step(a) {
 	}
 	var num = b.array.slice(0,pos);
 	var rest = b.array.slice(pos,b.array.length);
-	num = num-1;
-	b.array2 = num+rest;
-	return b.ignored+b.base+"["+b.array2+b.base+"["+b.array+(b.iterator-1)
-}
-function calculate(a,b) {
-	if(b==0) return a;
-	return calculate(step(a),b-1)
+	if(Math.ceil(num)-num+1==1) {
+		num = Math.floor(num)-1;
+		b.array2 = num+rest;
+		return b.ignored+b.base+"["+b.array2+b.base+"["+b.array+(b.iterator-1)
+	}
+	var num2 = Math.ceil(num);
+	b.array2 = num2+rest;
+	return b.ignored+b.base+"["+b.array2+(2*Math.pow(b.base/2,num-Math.ceil(num)+1));
 }
 exports.step=step
 exports.triggerchars="[]"
