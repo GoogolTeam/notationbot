@@ -1,10 +1,10 @@
 //todo: make a better api
 const notations=[require("./oldapi/unan.js")];
+var stopcalcs=[]
 function iscommand(text){
-	return /^!(?:step|calculate) /.test(text);
+	return /^!(?:step |calculate |stop$)/.test(text);
 }
-//will probably need a server/channel input
-function respond(text,reply){
+function respond(text,reply,servername,channelname){
 	if(/^!step /.test(text)){
 		var output=step(text.slice(6));
 		if(output!==null){
@@ -27,6 +27,10 @@ function respond(text,reply){
 			}else{
 				temp=[]
 			}
+			if(stopcalcs.includes(servername+"~"+channelname)){
+				stopcalcs.splice(stopcalcs.indexOf(servername+"~"+channelname),1);
+				return;
+			}
 			if(buffer.length>0&&current!==null){
 				reply(buffer.join("\n")).then(loop);
 			}else if(buffer.length>0){
@@ -35,6 +39,8 @@ function respond(text,reply){
 			buffer=temp;
 		}
 		loop();
+	}else if(/^!stop$/.test(text)){
+		stopcalcs.push(servername+"~"+channelname);
 	}
 }
 function step(str){

@@ -13,7 +13,7 @@ function respond(msg){
 	}
 	if(commands.iscommand(msg.content)){
 		msg.channel.startTyping();
-		commands.respond(msg.content,reply);
+		commands.respond(msg.content,reply,msg.channel.name,msg.guild.name);
 		msg.channel.stopTyping();
 	}
 }

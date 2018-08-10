@@ -9,5 +9,5 @@ stdin.addListener("data",d=>{
 			win();
 		})
 	}
-	commands.respond(d.toString().slice(0,-1),reply);
+	commands.respond(d.toString().slice(0,-1),reply,"Terminal","window");
 });
