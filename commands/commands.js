@@ -6,18 +6,19 @@ function iscommand(text){
 }
 function respond(text,reply){
 	if(/^!step /.test(text)){
-		reply(step(text.slice(6)));
+		var output=step(text.slice(6));
+		if(output!==null){
+			reply(output);
+		}
 	}else if(/^!calculate /.test(text)){
 		var current=text.slice(11);
 		function loop(){
 			current=step(current);
-			if(current===null){
-				clearInterval(looper);
-			}else{
-				reply(current);
+			if(current!==null){
+				reply(current).then(loop);
 			}
 		}
-		var looper=setInterval(loop,100);
+		loop();
 	}
 }
 function step(str){
