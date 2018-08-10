@@ -1,10 +1,21 @@
 //todo: make a better api
 const notations=[require("./oldapi/unan.js")];
-function respond(text){
-	if(/^!notation /.test(text)){
-		return step(text.slice(10));
+//will probably need a server/channel input
+function respond(text,reply){
+	if(/^!step /.test(text)){
+		reply(step(text.slice(6)));
+	}else if(/^!calculate /.test(text)){
+		var current=text.slice(11);
+		function loop(){
+			current=step(current);
+			if(current===null){
+				clearInterval(looper);
+			}else{
+				reply(current);
+			}
+		}
+		var looper=setInterval(loop,100);
 	}
-	return null;
 }
 function step(str){
 	var notation=-1;
