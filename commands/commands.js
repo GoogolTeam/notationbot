@@ -1,5 +1,5 @@
 //todo: make a better api
-const notations=[require("./oldapi/unan.js")];
+const notations=[require("./oldapi/unan.js"),require("./oldapi/basicmath.js"),require("./oldapi/letters.js"),require("./oldapi/uparrows.js")];
 var stopcalcs=[]
 function iscommand(text){
 	return /^!(?:step |calculate |stop$)/.test(text);
