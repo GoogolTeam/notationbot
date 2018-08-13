@@ -7,14 +7,14 @@ function proc(x,y,a,n) {     // gets nth term of "FS" of UNAN rray a a, given ba
 	for (var i=0;i<=a.length;i++) {
 		if(a[i]==","&&a[i+1]!="0"||a[i+2]==".") {    // Found a comma followed by nonzero entry
 			pos = i;
-			pos2 = a.length-1;
+			pos2 = a.length;
 			for(var j=pos+1;j<a.length;j++) {
 				if(a[j]==","||a[j]=="{") {
 					pos2 = j; // found the end of the entry immediately following the comma
 					break;
 				}
 			}
-			var c = {start:a.slice(0,pos-1),middle:a.slice(pos+1,pos2),end:a.slice(pos2,a.length)};
+			var c = {start:a.slice(0,pos-1),middle:a.slice(pos+1,pos2),end:a.slice(pos2,a.length)};
 			if(c.middle-Math.ceil(c.middle)+1==1) {
 				c.middle--;
 				return c.start+n+","+c.middle+c.end;
@@ -27,20 +27,22 @@ function proc(x,y,a,n) {     // gets nth term of "FS" of UNAN rray a a, given ba
 		if(a[i]=="}"&&a[i+1]!="0"||a[i+2]==".") {  // found a nonzero entry after a separator
 			pos = i;
 			pos2 = i;
-			while(a[pos2]!="{") {   // find the start of the separator
-				pos2--;
+			while(a[pos]!="{") {   // find the start of the separator
+				pos--;
 			}
-			for(var j=pos;j<a.length;j++) {   // find end of the entry after the }
-				if(a[j]==","||a[j]=="{"||a[j]=="]") {
-					pos = j;
+			pos2 = a.length;
+			for(var j=i;j<a.length;j++) {   // find end of the entry after the }
+				if(a[j]==","||a[j]=="{") {
+					pos2 = j;
 					break;
 				}
 			}
-			var f = {start:a.slice(0,pos2-1),middle:a.slice(pos2-1,pos),end:a.slice(pos,a.length)}
+			var f = {start:a.slice(0,pos-1),middle:a.slice(pos-1,pos2),end:a.slice(pos2,a.length)}
 			var left = f.middle.search("\\{");
 			var right = f.middle.search("\\}");
 			var g = {sep:f.middle.slice(left+1,right),num:f.middle.slice(right+1,f.middle.length)};
-			if(sep[0]==0&&sep[1]!=".") return f.start+"{"+proc(x,y,sep,n)+"}"+"1"+"{"+sep+"}"+(g.num-1)+f.end;    // separator starts with 0;
+			return g.sep;
+			if(g.sep[0]==0&&g.sep[1]!=".") return f.start+"{"+proc(x,y,g.sep,n)+"}"+"1"+"{"+g.sep+"}"+(g.num-1)+f.end;    // separator starts with 0;
 			var m = g.sep.search("\\,")
 			var h = {start:g.sep.slice(0,m)-1,end:g.sep.slice(m,g.sep.length)};
 			var rep = "0"+"{"+h.start+h.end+"}";
