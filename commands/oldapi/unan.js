@@ -4,16 +4,17 @@
 function proc(x,y,a,n) {     // gets nth term of "FS" of UNAN rray a a, given base x for continuous UNAN. Called by step() if first entry of array is 0.
 	var pos = 0;
 	var pos2 = 0;    // counters for positions in the string of the array
-	for (var i=0;i<a.length;i++) {
-			if(a[i]==","&&a[i+1]!="0"||a[i+2]==".") {    // Found a comma followed by nonzero entry
+	for (var i=0;i<=a.length;i++) {
+		if(a[i]==","&&a[i+1]!="0"||a[i+2]==".") {    // Found a comma followed by nonzero entry
 			pos = i;
+			pos2 = a.length-1;
 			for(var j=pos+1;j<a.length;j++) {
-				if(a[j]==","||a[j]=="{"||a[j]=="]") {
+				if(a[j]==","||a[j]=="{") {
 					pos2 = j; // found the end of the entry immediately following the comma
 					break;
 				}
 			}
-			var c = {start:a.slice(0,pos-1),middle:a.slice(pos+1,pos2),end:a.slice(pos2,a.length)};
+			var c = {start:a.slice(0,pos-1),middle:a.slice(pos+1,pos2),end:a.slice(pos2,a.length)};
 			if(c.middle-Math.ceil(c.middle)+1==1) {
 				c.middle--;
 				return c.start+n+","+c.middle+c.end;
