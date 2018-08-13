@@ -1,10 +1,10 @@
 //Originally made by Username5243 (github GoogolTeam/googol)
 //Modified to work in Node.js
 
-function proc(x,y,a,n) {     // gets nth term of "FS" of UNAN array a, given base x for continuous UNAN. Called by step() if first entry of array is 0.
+function proc(x,y,a,n) {     // gets nth term of "FS" of UNAN rray a a, given base x for continuous UNAN. Called by step() if first entry of array is 0.
 	var pos = 0;
 	var pos2 = 0;    // counters for positions in the string of the array
-	for (var i=0;i<array.length;i++) {
+	for (var i=0;i<a.length;i++) {
 			if(a[i]==","&&a[i+1]!="0"||a[i+2]==".") {    // Found a comma followed by nonzero entry
 			pos = i;
 			for(var j=pos+1;j<a.length;j++) {
@@ -13,7 +13,7 @@ function proc(x,y,a,n) {     // gets nth term of "FS" of UNAN array a, given bas
 					break;
 				}
 			}
-			var c = {start:a.slice(0,pos-1),middle:a.slice(pos+1,pos2),end:a(pos2,b.array.length)};
+			var c = {start:a.slice(0,pos-1),middle:a.slice(pos+1,pos2),end:a.slice(pos2,a.length)};
 			if(c.middle-Math.ceil(c.middle)+1==1) {
 				c.middle--;
 				return c.start+n+","+c.middle+c.end;
@@ -23,13 +23,13 @@ function proc(x,y,a,n) {     // gets nth term of "FS" of UNAN array a, given bas
 			c.middle = Math.ceil(c.middle)-1;
 			return c.start+arg+","+c.middle+c.end;
 		}
-		if(b.array[i]=="}"&&b.array[i+1]!="0"||b.array[i+2]==".") {  // found a nonzero entry after a separator
+		if(a[i]=="}"&&a[i+1]!="0"||a[i+2]==".") {  // found a nonzero entry after a separator
 			pos = i;
 			pos2 = i;
 			while(a[pos2]!="{") {   // find the start of the separator
 				pos2--;
 			}
-			for(var j=pos;j<b.array.length;j++) {   // find end of the entry after the }
+			for(var j=pos;j<a.length;j++) {   // find end of the entry after the }
 				if(a[j]==","||a[j]=="{"||a[j]=="]") {
 					pos = j;
 					break;
@@ -98,6 +98,7 @@ function step(a) {
 	if(b.array[0]==0&&b.array[1]!=".") { 
 		if(b.iterator<=2) return b.ignored+b.base+"["+proc(b.base,b.iterator,b.array.slice(0,b.array.length-1),2)+"]"+Math.pow(b.base,b.iterator-1);
 		return b.ignored+b.base+"["+proc(b.base,b.iterator,b.array.slice(0,b.array.length-1),b.iterator)+"]"+b.base;
+	}
 	for(var i=0;i<b.array.length;i++) {
 		if(b.array[i]==","||b.array[i]=="{"||b.array[i]=="]") {
 			pos = i;
